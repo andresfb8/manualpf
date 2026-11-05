@@ -1,5 +1,5 @@
 ---
-numero: 03
+numero: "03"
 titulo: Apertura y cierre de sala
 zona: Sala
 roles: [Entrenadores]

@@ -116,45 +116,66 @@ Tres capas, y solo la primera es obligatoria:
 
 ## Editar sin tocar archivos
 
-El contenido es Markdown plano, así que cualquier CMS basado en Git puede escribir en
-él sin cambiar nada del diseño. Lo más directo es **Decap CMS**, que añade un panel en
-`/admin` sobre el mismo repositorio:
+El panel ya está montado en `/admin`. No hay que venir a esta conversación ni ejecutar
+nada: se abre en el navegador, se elige un proceso y se publica.
 
-```yaml
-# publico/admin/config.yml (extracto)
-backend:
-  name: github
-  repo: vuestra-cuenta/manual-planet-fitness
-  branch: main
-media_folder: "publico/imagenes"
-collections:
-  - name: procesos
-    label: Procesos
-    folder: contenido/procesos
-    extension: md
-    format: frontmatter
-    create: true
-    fields:
-      - { name: titulo, label: Título, widget: string }
-      - { name: dueno, label: Responsable, widget: string }
-      - { name: revisado, label: Última revisión, widget: date }
-      - { name: cadencia, label: Cadencia (meses), widget: number, default: 12 }
-      - { name: body, label: Contenido, widget: markdown }
+### Publicarlo la primera vez (una tarde)
+
+1. **GitHub.** Crea un repositorio privado y sube el proyecto:
+
+   ```
+   git remote add origin git@github.com:TU-USUARIO/manual-planet-fitness.git
+   git push -u origin main
+   ```
+
+2. **Netlify.** *Add new site → Import an existing project → GitHub*. Elige el
+   repositorio y no toques nada: `netlify.toml` ya trae el comando de construcción
+   (`node scripts/construir.mjs`) y la carpeta que se publica (`dist`).
+
+3. **La línea que falta.** En el repositorio, abre `publico/admin/config.yml` y cambia
+   `repo: CAMBIAR-usuario/manual-planet-fitness` por tu usuario real. Guarda y sube.
+
+4. **El permiso.** Entra en `https://TU-SITIO.netlify.app/admin`. La primera vez pide
+   autorizar a GitHub: se concede una vez por persona y no vuelve a preguntar.
+
+### El día a día
+
+`/admin` → Procesos → elegir el proceso → editar → **Publicar**.
+
+En un minuto está en el manual. Si intentas guardar sin responsable o sin fecha, no te
+deja: los campos obligatorios del formulario son los mismos que exige la construcción.
+Y cada cambio queda en el histórico con quién lo hizo.
+
+### Probarlo en tu ordenador, sin cuentas
+
+```
+npx decap-server          # una terminal, en la carpeta del proyecto
+node scripts/servir.mjs   # otra terminal
 ```
 
-Necesita que alguien conceda el acceso OAuth del repositorio una sola vez. A partir de
-ahí, recepción o peluquería editan con formularios y el manual se reconstruye solo.
+Y abrir `http://127.0.0.1:5177/admin/`. Ahí está activado `local_backend`, así que el
+panel escribe directamente en los archivos: sirve para probar sin tocar GitHub.
+
+### Si el permiso falla
+
+El panel depende de un OAuth de GitHub. Si Netlify dejara de ofrecer su pasarela, se
+resuelve con un pequeño worker (unas veinte líneas) sin tocar ni el contenido ni el
+diseño. Es el único punto externo de todo el montaje.
 
 ---
 
 ## Publicarlo
 
-El resultado de `dist/` es estático: se sube a Netlify, Cloudflare Pages, Vercel o
-cualquier servidor de la empresa. Opciones, de menos a más control:
+`netlify.toml` ya está preparado: al conectar el repositorio, Netlify construye con
+`node scripts/construir.mjs` y publica `dist/`.
 
-- **Netlify o Cloudflare Pages**, gratis, con despliegue automático en cada cambio.
-- **Servidor propio**, copiando `dist/` por FTP. Funciona igual, sin despliegue automático.
-- **Solo intranet**, con contraseña o detrás de la VPN del club.
+- **Netlify** (recomendado): gratis para este tamaño, HTTPS y despliegue automático en
+  cada cambio.
+- **Cloudflare Pages**: también gratis; hay que indicar a mano el comando y la carpeta.
+- **Servidor propio**: ejecutar `node scripts/construir.mjs` y copiar `dist/` por FTP.
+- **Solo intranet**: igual, con contraseña o detrás de la VPN del club.
+
+El panel va marcado con `noindex` y cabeceras que impiden incrustarlo en otro sitio.
 
 Si el manual es interno, protégelo: no hay nada sensible dentro, pero tampoco hace
 falta que sea público.
@@ -170,15 +191,15 @@ Esto es un prototipo, y hay cuatro cosas que no están hechas a propósito:
 - **Fotos reales** de la sala, la máquina concreta o el mostrador. Un manual con una
   foto del sitio correcto ahorra tres párrafos.
 - **Historial visible** en la propia ficha: quién cambió qué y cuándo.
-- **Acceso con la cuenta del club** (Google Workspace, Microsoft), si se publica fuera
-  de la intranet.
 
 ---
 
 ## Decisiones que conviene conocer
 
-- **Sin dependencias.** No hay `node_modules`, ni framework, ni actualizaciones que
-  rompan el manual en dos años. Node solo lee archivos y escribe HTML.
+- **Sin dependencias en el manual.** No hay `node_modules`, ni framework, ni
+  actualizaciones que rompan el sitio en dos años. Node solo lee archivos y escribe
+  HTML. El panel de edición es lo único externo: carga Decap desde un CDN y solo se
+  abre cuando alguien va a editar.
 - **Contenido separado del diseño.** Cambiar los pasos de un proceso no toca ni una
   línea de CSS.
 - **El estado se calcula, no se escribe.** Nadie marca «caducado» a mano: sale de la

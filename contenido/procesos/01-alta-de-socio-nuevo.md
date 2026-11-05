@@ -1,5 +1,5 @@
 ---
-numero: 01
+numero: "01"
 titulo: Alta de socio nuevo
 zona: Recepción
 roles: [Recepción]

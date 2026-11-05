@@ -123,6 +123,52 @@ console.log("\n  Contrato de contenido\n");
     : mal(`estados incorrectos: ${JSON.stringify(mapa)}`);
 }
 
+/* 7. el formato que escribe el panel de edición (listas en bloque) */
+{
+  const carpeta = mkdtempSync(join(dir, "panel"));
+  const escritoPorElPanel = `---
+numero: "07"
+titulo: Proceso escrito desde el panel
+zona: Recepción
+roles:
+  - Recepción
+  - Entrenadores
+dueno: Diana
+duenoRol: Responsable del manual
+email: diana@planetfitness.es
+critico: false
+version: 2
+revisado: 2026-02-01
+cadencia: 12
+cuando: Cuando alguien edita desde el panel y no toca el archivo.
+etiquetas:
+  - prueba
+  - panel
+---
+
+## Pasos
+
+### Único paso
+
+Comprobar que entra igual.
+`;
+  writeFileSync(join(carpeta, "07-panel.md"), escritoPorElPanel, "utf8");
+  try {
+    const [p] = cargarProcesos(carpeta, "2026-11-05");
+    const ok =
+      p.roles.length === 2 &&
+      p.roles[0] === "Recepción" &&
+      p.etiquetas.includes("panel") &&
+      p.dueno === "Diana" &&
+      p.estado === "aldia";
+    ok
+      ? bien("entiende el YAML que escribe el panel (listas en bloque)")
+      : mal(`no interpretó bien el formato del panel: ${JSON.stringify(p.roles)} / ${JSON.stringify(p.etiquetas)}`);
+  } catch (e) {
+    mal(`el formato del panel rompe la construcción: ${e.message}`);
+  }
+}
+
 rmSync(dir, { recursive: true, force: true });
 
 console.log(

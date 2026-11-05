@@ -1,5 +1,5 @@
 ---
-numero: 05
+numero: "05"
 titulo: Reserva, cambio y no-show en peluquería
 zona: Peluquería
 roles: [Peluquería, Recepción]

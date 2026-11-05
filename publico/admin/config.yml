@@ -59,16 +59,13 @@ collections:
 
       - label: Quién lo usa
         name: roles
-        widget: list
+        widget: select
+        multiple: true
         required: true
-        field:
-          label: Rol
-          name: rol
-          widget: select
-          options:
-            - Recepción
-            - Entrenadores
-            - Peluquería
+        options:
+          - Recepción
+          - Entrenadores
+          - Peluquería
 
       - label: Responsable
         name: dueno

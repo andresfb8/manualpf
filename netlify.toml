@@ -12,3 +12,9 @@
   [headers.values]
     X-Robots-Tag = "noindex"
     X-Frame-Options = "DENY"
+
+# Decap se niega a leer la configuración si no llega como YAML.
+[[headers]]
+  for = "/admin/config.yml"
+  [headers.values]
+    Content-Type = "text/yaml; charset=utf-8"

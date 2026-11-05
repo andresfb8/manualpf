@@ -1,5 +1,5 @@
 ---
-numero: 02
+numero: "02"
 titulo: Cobro rechazado y cuota impagada
 zona: Recepción
 roles: [Recepción]

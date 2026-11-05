@@ -12,6 +12,8 @@ const tipos = {
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".yml": "text/yaml; charset=utf-8",
+  ".yaml": "text/yaml; charset=utf-8",
   ".ttf": "font/ttf",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",

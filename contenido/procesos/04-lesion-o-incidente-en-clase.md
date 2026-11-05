@@ -1,5 +1,5 @@
 ---
-numero: 04
+numero: "04"
 titulo: Lesión o incidente en clase
 zona: Sala
 roles: [Entrenadores, Recepción]
