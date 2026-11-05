@@ -8,33 +8,75 @@
 <meta name="theme-color" content="#A4278D">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23A4278D'/%3E%3Crect x='19' y='7' width='7' height='7' fill='%23F9F72E'/%3E%3C/svg%3E">
 <style>
-  html, body { margin: 0; height: 100%; background: #fff; }
-  .cargando {
+  html, body { margin: 0; background: #f4f6f8; }
+
+  #nc-root { min-height: 100vh; }
+
+  /* El aviso de carga vive DENTRO del contenedor de Decap y desaparece solo
+     cuando la aplicación se dibuja. Antes era un bloque de altura completa
+     colocado antes, y empujaba el panel fuera de la pantalla. */
+  #nc-root:empty {
     display: grid;
-    place-content: center;
-    height: 100%;
-    font: 500 13px/1.5 "Archivo", system-ui, sans-serif;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: #5a5a5a;
-    gap: 14px;
-    text-align: center;
+    align-content: center;
+    justify-items: center;
+    gap: 16px;
+    min-height: 100vh;
   }
-  .cargando::before {
+
+  #nc-root:empty::before {
     content: "";
-    width: 28px;
-    height: 28px;
-    margin: 0 auto;
+    width: 26px;
+    height: 26px;
     border: 3px solid #f0d5ea;
     border-top-color: #a4278d;
     border-radius: 50%;
-    animation: girar .8s linear infinite;
+    animation: girar 0.8s linear infinite;
   }
+
+  #nc-root:empty::after {
+    content: "Abriendo el panel";
+    font: 500 12px/1 "Archivo", system-ui, sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5a5a5a;
+  }
+
   @keyframes girar { to { transform: rotate(360deg); } }
+
+  #aviso {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid #000;
+    border-left: 4px solid #a4278d;
+    background: #fff;
+    font: 400 13px/1.45 "Archivo", system-ui, sans-serif;
+    color: #2b2b2b;
+    max-width: 520px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #nc-root:empty::before { animation: none; }
+  }
 </style>
 </head>
 <body>
-<div class="cargando">Abriendo el panel</div>
+<div id="nc-root"></div>
+<p id="aviso" hidden>
+  El panel no ha cargado. Comprueba la conexión y recarga la página. Si sigue
+  igual, avisa a quien mantenga el manual.
+</p>
+<script>
+  setTimeout(function () {
+    var raiz = document.getElementById("nc-root");
+    if (raiz && raiz.children.length === 0) {
+      document.getElementById("aviso").hidden = false;
+    }
+  }, 12000);
+</script>
 <script src="https://unpkg.com/decap-cms@3.6.0/dist/decap-cms.js"></script>
 </body>
 </html>
