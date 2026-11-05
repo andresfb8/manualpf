@@ -1,0 +1,12 @@
+{
+  "name": "manual-pulso",
+  "version": "1.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Manual de operaciones interactivo, sin dependencias.",
+  "scripts": {
+    "build": "node scripts/construir.mjs",
+    "revisar": "node scripts/construir.mjs && node scripts/revisar.mjs",
+    "serve": "node scripts/servir.mjs 5177"
+  }
+}

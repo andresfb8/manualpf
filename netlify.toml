@@ -1,0 +1,14 @@
+# Netlify: cómo construir y qué publicar.
+[build]
+  command = "node scripts/construir.mjs"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# El panel no debe indexarse en buscadores.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+    X-Frame-Options = "DENY"

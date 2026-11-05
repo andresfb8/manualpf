@@ -1,0 +1,158 @@
+# Panel de edición del manual.
+# Cada proceso es un archivo de texto en contenido/procesos. Este panel solo
+# escribe esos archivos; el manual se reconstruye solo al guardar.
+#
+# Antes de publicar hay que cambiar una línea: backend.repo
+
+backend:
+  name: github
+  repo: CAMBIAR-usuario/manual-planet-fitness
+  branch: main
+  base_url: https://api.netlify.com
+
+# Permite editar en local con `npx decap-server`, sin cuentas ni OAuth.
+local_backend: true
+
+media_folder: "publico/imagenes"
+public_folder: "/imagenes"
+
+locale: es
+site_url: https://manual.planetfitness.es
+
+collections:
+  - name: procesos
+    label: Procesos
+    label_singular: Proceso
+    description: >-
+      Cada proceso del club. Todo lo que se escriba aquí aparece en el manual
+      en el siguiente minuto.
+    folder: contenido/procesos
+    create: true
+    delete: false
+    format: frontmatter
+    extension: md
+    slug: "{{fields.numero}}-{{slug}}"
+    identifier_field: titulo
+    summary: "{{numero}} · {{titulo}} — {{dueno}}"
+    sortable_fields: [numero, titulo, revisado]
+    fields:
+      - label: Número
+        name: numero
+        widget: string
+        required: true
+        hint: "Dos cifras. Marca el orden en la lista: 01, 02, 03…"
+
+      - label: Título
+        name: titulo
+        widget: string
+        required: true
+        hint: "Lo que hace el proceso, no el departamento: «Alta de socio nuevo»."
+
+      - label: Zona
+        name: zona
+        widget: select
+        required: true
+        options:
+          - Recepción
+          - Sala
+          - Peluquería
+
+      - label: Quién lo usa
+        name: roles
+        widget: list
+        required: true
+        field:
+          label: Rol
+          name: rol
+          widget: select
+          options:
+            - Recepción
+            - Entrenadores
+            - Peluquería
+
+      - label: Responsable
+        name: dueno
+        widget: select
+        required: true
+        options:
+          - Andrés
+          - Diana
+        hint: "Quien responde de que esta ficha esté al día."
+
+      - label: Puesto del responsable
+        name: duenoRol
+        widget: string
+        default: Responsable del manual
+
+      - label: Correo del responsable
+        name: email
+        widget: string
+        required: true
+        hint: "Aquí llegan los avisos cuando la ficha caduca."
+
+      - label: ¿Es un protocolo crítico?
+        name: critico
+        widget: boolean
+        default: false
+        required: false
+        hint: "Márcalo si un error en este proceso puede hacer daño a alguien."
+
+      - label: Versión
+        name: version
+        widget: number
+        default: 1
+        value_type: int
+        required: true
+
+      - label: Última revisión
+        name: revisado
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        required: true
+        hint: "El día en que alguien leyó esto y dijo que seguía siendo verdad."
+
+      - label: Cadencia
+        name: cadencia
+        widget: number
+        default: 12
+        value_type: int
+        required: true
+        hint: "Cada cuántos meses hay que volver a revisarlo."
+
+      - label: Cuándo se usa
+        name: cuando
+        widget: text
+        required: true
+        hint: >-
+          La duda del empleado, en sus palabras. Una o dos frases. Aparece
+          debajo del título y es lo que se lee en el buscador.
+
+      - label: Etiquetas
+        name: etiquetas
+        widget: list
+        required: true
+        field:
+          label: Palabra
+          name: palabra
+          widget: string
+        hint: "Palabras por las que alguien buscaría esto."
+
+      - label: Procesos relacionados
+        name: relacionados
+        widget: list
+        required: false
+        field:
+          label: Número del proceso
+          name: numero
+          widget: string
+
+      - label: Contenido
+        name: body
+        widget: markdown
+        required: true
+        hint: >-
+          Estructura fija: «## Antes de empezar» con puntos, «## Pasos» con un
+          «### » por paso, las notas con «> » delante, y «## Si algo no cuadra».
+          No hace falta tocar los estilos.
