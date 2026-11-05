@@ -6,9 +6,10 @@
 
 backend:
   name: github
-  repo: CAMBIAR-usuario/manual-planet-fitness
+  repo: andresfb8/manualpf
   branch: main
   base_url: https://api.netlify.com
+  auth_endpoint: auth
 
 # Permite editar en local con `npx decap-server`, sin cuentas ni OAuth.
 local_backend: true
@@ -17,7 +18,7 @@ media_folder: "publico/imagenes"
 public_folder: "/imagenes"
 
 locale: es
-site_url: https://manual.planetfitness.es
+site_url: https://manualpf.netlify.app
 
 collections:
   - name: procesos

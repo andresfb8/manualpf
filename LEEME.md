@@ -121,19 +121,25 @@ nada: se abre en el navegador, se elige un proceso y se publica.
 
 ### Publicarlo la primera vez (una tarde)
 
-1. **GitHub.** Crea un repositorio privado y sube el proyecto:
+1. **GitHub.** El repositorio ya está configurado: `andresfb8/manualpf`. Si el remoto
+   no existe en tu copia, se añade con:
 
    ```
-   git remote add origin git@github.com:TU-USUARIO/manual-planet-fitness.git
+   git remote add origin https://github.com/andresfb8/manualpf.git
    git push -u origin main
    ```
+
+   Ese repositorio es **público** ahora mismo. Si el manual no debe serlo, cámbialo en
+   *Settings → General → Danger Zone → Change visibility*. El panel funciona igual con
+   el repositorio privado.
 
 2. **Netlify.** *Add new site → Import an existing project → GitHub*. Elige el
    repositorio y no toques nada: `netlify.toml` ya trae el comando de construcción
    (`node scripts/construir.mjs`) y la carpeta que se publica (`dist`).
 
-3. **La línea que falta.** En el repositorio, abre `publico/admin/config.yml` y cambia
-   `repo: CAMBIAR-usuario/manual-planet-fitness` por tu usuario real. Guarda y sube.
+3. **La URL.** Cuando Netlify te dé la dirección del sitio, si no es
+   `https://manualpf.netlify.app`, cambia esa línea en `publico/admin/config.yml`
+   (`site_url`). Solo afecta al enlace «Regresar al sitio» del panel; nada más.
 
 4. **El permiso.** Entra en `https://TU-SITIO.netlify.app/admin`. La primera vez pide
    autorizar a GitHub: se concede una vez por persona y no vuelve a preguntar.
