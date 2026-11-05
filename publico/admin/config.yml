@@ -18,7 +18,7 @@ media_folder: "publico/imagenes"
 public_folder: "/imagenes"
 
 locale: es
-site_url: https://manualpf.netlify.app
+site_url: https://manualplanet.netlify.app
 
 collections:
   - name: procesos
